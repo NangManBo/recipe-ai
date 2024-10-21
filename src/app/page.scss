@@ -1,0 +1,48 @@
+.main-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  background-color: white;
+
+  .title {
+    font-size: 30px;
+  }
+
+  .input {
+    width: 340px;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+}
+
+.select-button-box {
+  display: flex;
+  justify-content: space-between;
+  width: 360px;
+  .select {
+    width: 40%;
+    height: 40px;
+    margin: 10px 0;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .button {
+    width: 50%;
+    height: 40px;
+    margin: 10px 0;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f4af54;
+    color: white;
+    cursor: pointer;
+  }
+}

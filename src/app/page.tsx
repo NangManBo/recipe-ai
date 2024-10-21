@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import LoadingModal from '../components/LoadingModal'; // 로딩 모달 컴포넌트
+import './page.scss'; // SCSS 모듈 import
 
 export default function Home() {
   const [ingredients, setIngredients] = useState('');
@@ -31,27 +32,33 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <h1>AI 요리 추천</h1>
+    <div className="main-page">
+      <p className="title">AI 요리 추천</p>
       <input
+        className="input"
         type="text"
         value={ingredients}
         onChange={(e) => setIngredients(e.target.value)}
         placeholder="재료를 입력하세요"
       />
-      <select
-        value={difficulty}
-        onChange={(e) =>
-          setDifficulty(Number(e.target.value))
-        }
-      >
-        <option value={1}>난이도 1</option>
-        <option value={2}>난이도 2</option>
-        <option value={3}>난이도 3</option>
-        <option value={4}>난이도 4</option>
-        <option value={5}>난이도 5</option>
-      </select>
-      <button onClick={getRecipe}>레시피 가져오기</button>
+      <div className="select-button-box">
+        <select
+          className="select"
+          value={difficulty}
+          onChange={(e) =>
+            setDifficulty(Number(e.target.value))
+          }
+        >
+          <option value={1}>난이도 1</option>
+          <option value={2}>난이도 2</option>
+          <option value={3}>난이도 3</option>
+          <option value={4}>난이도 4</option>
+          <option value={5}>난이도 5</option>
+        </select>
+        <button className="button" onClick={getRecipe}>
+          레시피 가져오기
+        </button>
+      </div>
       {isLoading && <LoadingModal />}{' '}
       {/* 로딩 중일 때 모달 표시 */}
       {/* 메인 레시피와 부재료 레시피 출력 */}
