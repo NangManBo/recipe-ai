@@ -2,21 +2,31 @@
 
 import { useState } from 'react';
 import axios from 'axios';
+import LoadingModal from '../components/LoadingModal'; // 로딩 모달 컴포넌트
 
 export default function Home() {
   const [ingredients, setIngredients] = useState('');
   const [difficulty, setDifficulty] = useState(1);
-  const [recipe, setRecipe] = useState('');
+  const [mainRecipe, setMainRecipe] = useState('');
+  const [sideRecipe, setSideRecipe] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
 
   const getRecipe = async () => {
+    setIsLoading(true); // 로딩 시작
     try {
       const response = await axios.post('/api/recommend', {
         ingredients,
         difficulty_level: difficulty,
       });
-      setRecipe(response.data.recipe);
+
+      const { main_recipe, side_recipe } = response.data; // 서버로부터 받은 데이터
+      setMainRecipe(main_recipe); // 메인 레시피 설정
+      setSideRecipe(side_recipe || '부재료 없음'); // 부재료 레시피가 없는 경우 대체 텍스트
+      console.log('Recipe:', response.data);
     } catch (error) {
       console.error('Error fetching recipe:', error);
+    } finally {
+      setIsLoading(false); // 로딩 종료
     }
   };
 
@@ -42,11 +52,19 @@ export default function Home() {
         <option value={5}>난이도 5</option>
       </select>
       <button onClick={getRecipe}>레시피 가져오기</button>
-
-      {recipe && (
+      {isLoading && <LoadingModal />}{' '}
+      {/* 로딩 중일 때 모달 표시 */}
+      {/* 메인 레시피와 부재료 레시피 출력 */}
+      {mainRecipe && (
         <div>
-          <h2>추천된 레시피:</h2>
-          <p>{recipe}</p>
+          <h2>추천된 메인 레시피:</h2>
+          <p>{mainRecipe}</p>
+        </div>
+      )}
+      {sideRecipe && (
+        <div>
+          <h2>추천된 부재료 레시피:</h2>
+          <p>{sideRecipe}</p>
         </div>
       )}
     </div>
