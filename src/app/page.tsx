@@ -64,13 +64,13 @@ export default function Home() {
       {/* 메인 레시피와 부재료 레시피 출력 */}
       {mainRecipe && (
         <div>
-          <h2>추천된 메인 레시피:</h2>
+          <h2>추천된 메인 레시피</h2>
           <p>{mainRecipe}</p>
         </div>
       )}
       {sideRecipe && (
         <div>
-          <h2>추천된 부재료 레시피:</h2>
+          <h2>추천된 부재료 레시피</h2>
           <p>{sideRecipe}</p>
         </div>
       )}
