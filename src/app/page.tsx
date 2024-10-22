@@ -8,9 +8,17 @@ import './page.scss'; // SCSS 모듈 import
 export default function Home() {
   const [ingredients, setIngredients] = useState('');
   const [difficulty, setDifficulty] = useState(1);
-  const [mainRecipe, setMainRecipe] = useState('');
-  const [sideRecipe, setSideRecipe] = useState('');
+  const [mainRecipe, setMainRecipe] = useState<string[]>(
+    []
+  ); // 배열로 수정
+  const [sideRecipe, setSideRecipe] = useState<string[]>(
+    []
+  ); // 배열로 수정
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+
+  const splitRecipeSteps = (recipe: string) => {
+    return recipe.split(/\d+\.\s/).filter((step) => step); // 숫자 + 점(. )으로 구분
+  };
 
   const getRecipe = async () => {
     setIsLoading(true); // 로딩 시작
@@ -21,8 +29,11 @@ export default function Home() {
       });
 
       const { main_recipe, side_recipe } = response.data; // 서버로부터 받은 데이터
-      setMainRecipe(main_recipe); // 메인 레시피 설정
-      setSideRecipe(side_recipe || '부재료 없음'); // 부재료 레시피가 없는 경우 대체 텍스트
+
+      // 레시피를 배열로 분리하여 상태 저장
+      setMainRecipe(splitRecipeSteps(main_recipe)); // 메인 레시피 설정
+      setSideRecipe(splitRecipeSteps(side_recipe || '')); // 부재료 레시피 설정
+
       console.log('Recipe:', response.data);
     } catch (error) {
       console.error('Error fetching recipe:', error);
@@ -59,19 +70,30 @@ export default function Home() {
           레시피 가져오기
         </button>
       </div>
-      {isLoading && <LoadingModal />}{' '}
-      {/* 로딩 중일 때 모달 표시 */}
+
+      <div className="line"></div>
+      {isLoading && <LoadingModal />}
+
       {/* 메인 레시피와 부재료 레시피 출력 */}
-      {mainRecipe && (
-        <div>
+      {mainRecipe.length > 0 && (
+        <div className="recipe-info">
           <h2>추천된 메인 레시피</h2>
-          <p>{mainRecipe}</p>
+          <ol>
+            {mainRecipe.map((step, index) => (
+              <li key={index}>{step}</li> // 각 단계를 번호로 구분
+            ))}
+          </ol>
         </div>
       )}
-      {sideRecipe && (
-        <div>
+
+      {sideRecipe.length > 0 && (
+        <div className="recipe-info">
           <h2>추천된 부재료 레시피</h2>
-          <p>{sideRecipe}</p>
+          <ol>
+            {sideRecipe.map((step, index) => (
+              <li key={index}>{step}</li> // 각 단계를 번호로 구분
+            ))}
+          </ol>
         </div>
       )}
     </div>
