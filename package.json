@@ -11,10 +11,15 @@
   "dependencies": {
     "axios": "^1.7.7",
     "next": "14.2.15",
+    "next-pwa": "^5.6.0",
     "openai": "^4.68.1",
     "react": "^18",
     "react-dom": "^18",
-    "sass": "^1.80.3"
+    "sass": "^1.80.3",
+    "workbox-core": "^7.1.0",
+    "workbox-precaching": "^7.1.0",
+    "workbox-routing": "^7.1.0",
+    "workbox-strategies": "^7.1.0"
   },
   "devDependencies": {
     "@types/node": "^20",
