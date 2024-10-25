@@ -1,7 +1,6 @@
 {
-  "name": "AI 요리 추천",
   "short_name": "AI Recipe",
-  "description": "주재료와 난이도를 입력하면 AI가 요리 레시피를 추천해줍니다.",
+  "name": "AI 요리 추천",
   "icons": [
     {
       "src": "icon-192x192.png",
