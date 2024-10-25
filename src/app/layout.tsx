@@ -16,12 +16,31 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         <meta name="theme-color" content="#000000" />
+
+        {/* PWA manifest and icons */}
         <link rel="manifest" href="/manifest.json" />
         <link
           rel="apple-touch-icon"
           href="/icon-192x192.png"
         />
         <link rel="icon" href="/favicon.ico" />
+
+        {/* Viewport settings to prevent zoom on input focus in mobile */}
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+        />
+
+        {/* Additional PWA settings */}
+        <meta
+          name="apple-mobile-web-app-capable"
+          content="yes"
+        />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+        <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body>{children}</body>
     </html>

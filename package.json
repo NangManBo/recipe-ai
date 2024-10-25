@@ -16,6 +16,7 @@
     "pwa": "^1.9.7",
     "react": "^18",
     "react-dom": "^18",
+    "react-select": "^5.8.1",
     "sass": "^1.80.3",
     "workbox-core": "^7.1.0",
     "workbox-precaching": "^7.1.0",
