@@ -60,7 +60,7 @@ export default function Home() {
 
   return (
     <div className="main-page">
-      <p className="title">AI 요리 추천</p>
+      <p className="title">AI 레시피 추천</p>
       <input
         className="input"
         type="text"
