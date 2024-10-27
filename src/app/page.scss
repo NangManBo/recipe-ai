@@ -1,12 +1,12 @@
 .main-page {
+  overflow-y: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 400px;
-  height: 100vh;
-  max-height: 1200px;
+  min-height: 800px;
+  height: auto;
   padding: 0;
-  margin: 0;
   background-color: white;
 
   .title {
@@ -16,8 +16,9 @@
   .input {
     font-family: 'BMJUA';
     width: 340px;
-    height: 40px;
-    padding: 0 10px;
+    height: 30px;
+    font-size: 15px;
+    padding: 10px 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
   }
@@ -57,16 +58,17 @@ ol li {
 
 .button {
   font-family: 'BMJUA';
-  position: absolute;
+  font-size: 20px;
+  position: fixed;
   bottom: 0;
   right: 0;
   width: 80px;
   height: 40px;
-  margin: 10px 0;
+  margin: 10px 30px;
   padding: 0 10px;
   border: none;
   border-radius: 5px;
-  background-color: #f4af54;
+  background-color: #b0eaff;
   color: white;
   cursor: pointer;
 }

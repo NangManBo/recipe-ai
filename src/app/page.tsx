@@ -131,7 +131,7 @@ export default function Home() {
         </div>
       )}
       <button className="button" onClick={getRecipe}>
-        <FontAwesomeIcon icon={faPlus} />;
+        <FontAwesomeIcon icon={faPlus} />
       </button>
     </div>
   );

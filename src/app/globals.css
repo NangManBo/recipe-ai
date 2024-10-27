@@ -1,6 +1,8 @@
 html,
 body {
-  background-color: antiquewhite;
+  margin: 0;
+  padding: 0;
+  background-color: aliceblue;
   max-width: 100vw;
   overflow-x: hidden;
 }
