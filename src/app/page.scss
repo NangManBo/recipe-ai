@@ -33,19 +33,6 @@
     height: 40px;
     margin: 10px 0;
   }
-
-  .button {
-    font-family: 'BMJUA';
-    width: 50%;
-    height: 40px;
-    margin: 10px 0;
-    padding: 0 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #f4af54;
-    color: white;
-    cursor: pointer;
-  }
 }
 
 .line {
@@ -66,4 +53,20 @@
 
 ol li {
   margin-bottom: 1rem; /* 한 줄 띄우기 위한 공간 추가 */
+}
+
+.button {
+  font-family: 'BMJUA';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 80px;
+  height: 40px;
+  margin: 10px 0;
+  padding: 0 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f4af54;
+  color: white;
+  cursor: pointer;
 }

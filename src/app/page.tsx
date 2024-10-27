@@ -3,11 +3,18 @@
 import { useState } from 'react';
 import axios from 'axios';
 import LoadingModal from '../components/LoadingModal';
-import Select, { SingleValue } from 'react-select'; // react-select와 SingleValue 타입 추가
+import Select, { SingleValue } from 'react-select';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import './page.scss';
 
 interface DifficultyOption {
   value: number;
+  label: string;
+}
+
+interface CuisineOption {
+  value: string;
   label: string;
 }
 
@@ -18,6 +25,8 @@ export default function Home() {
       value: 1,
       label: '난이도 1',
     });
+  const [cuisine, setCuisine] =
+    useState<CuisineOption | null>(null); // 요리 스타일 상태 추가
   const [mainRecipe, setMainRecipe] = useState<string[]>(
     []
   );
@@ -36,6 +45,7 @@ export default function Home() {
       const response = await axios.post('/api/recommend', {
         ingredients,
         difficulty_level: difficulty.value,
+        cuisine_type: cuisine?.value, // 요리 스타일 전달
       });
 
       const { main_recipe, side_recipe } = response.data;
@@ -58,6 +68,14 @@ export default function Home() {
     { value: 5, label: '난이도 5' },
   ];
 
+  const cuisineOptions: CuisineOption[] = [
+    { value: '한식', label: '한식' },
+    { value: '중식', label: '중식' },
+    { value: '양식', label: '양식' },
+    { value: '일식', label: '일식' },
+    { value: '분식', label: '분식' },
+  ];
+
   return (
     <div className="main-page">
       <p className="title">AI 레시피 추천</p>
@@ -77,9 +95,15 @@ export default function Home() {
           ) => setDifficulty(option as DifficultyOption)}
           options={difficultyOptions}
         />
-        <button className="button" onClick={getRecipe}>
-          레시피 가져오기
-        </button>
+        <Select
+          className="select"
+          placeholder="요리 스타일"
+          value={cuisine}
+          onChange={(option: SingleValue<CuisineOption>) =>
+            setCuisine(option as CuisineOption)
+          }
+          options={cuisineOptions}
+        />
       </div>
 
       <div className="line"></div>
@@ -106,6 +130,9 @@ export default function Home() {
           </ol>
         </div>
       )}
+      <button className="button" onClick={getRecipe}>
+        <FontAwesomeIcon icon={faPlus} />;
+      </button>
     </div>
   );
 }
