@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
       cuisine_type || '요리'
     } 레시피를 추천해 주세요.
       주재료는 ${ingredientsList}입니다.
+      반드시 현실적인 요리 레시피만 추천해주세요.
     `;
 
     const response_main =
@@ -45,6 +46,7 @@ export async function POST(req: NextRequest) {
       response_main.choices[0]?.message?.content?.trim() ||
       '메인 레시피를 찾을 수 없습니다.';
 
+    let side_recipe = null;
     if (difficulty_level > 1) {
       const prompt_side = `
         난이도 ${difficulty_level}에 맞는 부재료를 추가하여
@@ -52,6 +54,7 @@ export async function POST(req: NextRequest) {
           cuisine_type || '요리'
         }에 어울리는 추가 재료들을 포함한 레시피를 제공해 주세요.
         주재료는 ${ingredientsList}입니다.
+        반드시 현실적인 요리 레시피만 추천해주세요.
       `;
 
       const response_side =
@@ -68,19 +71,25 @@ export async function POST(req: NextRequest) {
           temperature: 0.7,
         });
 
-      const side_recipe =
+      side_recipe =
         response_side.choices[0]?.message?.content?.trim() ||
         '부재료 레시피를 찾을 수 없습니다.';
-
-      return NextResponse.json({
-        main_recipe,
-        side_recipe,
-      });
     }
+
+    // DALL·E를 사용하여 요리 결과 이미지 생성
+    const prompt_image = `다음 요리에 대한 고화질 요리 이미지 생성: ${main_recipe}`;
+    const response_image = await openai.images.generate({
+      prompt: prompt_image,
+      n: 1,
+      size: '512x512',
+    });
+
+    const image_url = response_image.data[0]?.url || null;
 
     return NextResponse.json({
       main_recipe,
-      side_recipe: null,
+      side_recipe,
+      image_url,
     });
   } catch (error) {
     console.error(
@@ -88,7 +97,10 @@ export async function POST(req: NextRequest) {
       error
     );
     return NextResponse.json(
-      { error: 'Failed to fetch recipe from GPT API' },
+      {
+        error:
+          'Failed to fetch recipe or image from GPT API',
+      },
       { status: 500 }
     );
   }

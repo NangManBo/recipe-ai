@@ -33,6 +33,9 @@ export default function Home() {
   const [sideRecipe, setSideRecipe] = useState<string[]>(
     []
   );
+  const [imageUrl, setImageUrl] = useState<string | null>(
+    null
+  ); // 이미지 URL 상태 추가
   const [isLoading, setIsLoading] = useState(false);
 
   const splitRecipeSteps = (recipe: string) => {
@@ -48,9 +51,11 @@ export default function Home() {
         cuisine_type: cuisine?.value, // 요리 스타일 전달
       });
 
-      const { main_recipe, side_recipe } = response.data;
+      const { main_recipe, side_recipe, image_url } =
+        response.data; // 이미지 URL 추가
       setMainRecipe(splitRecipeSteps(main_recipe));
       setSideRecipe(splitRecipeSteps(side_recipe || ''));
+      setImageUrl(image_url || null); // 이미지 URL 설정
 
       console.log('Recipe:', response.data);
     } catch (error) {
@@ -108,6 +113,16 @@ export default function Home() {
 
       <div className="line"></div>
       {isLoading && <LoadingModal />}
+      {imageUrl && (
+        <div className="image-container">
+          <h2>요리 결과 이미지</h2>
+          <img
+            src={imageUrl}
+            alt="추천된 요리"
+            className="recipe-image"
+          />
+        </div>
+      )}
 
       {mainRecipe.length > 0 && (
         <div className="recipe-info">
@@ -130,6 +145,7 @@ export default function Home() {
           </ol>
         </div>
       )}
+
       <button className="button" onClick={getRecipe}>
         <FontAwesomeIcon icon={faPlus} />
       </button>

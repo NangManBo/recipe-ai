@@ -73,3 +73,15 @@ ol li {
   color: white;
   cursor: pointer;
 }
+
+.image-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.recipe-image {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
