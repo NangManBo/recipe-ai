@@ -77,7 +77,14 @@ export async function POST(req: NextRequest) {
     }
 
     // DALL·E를 사용하여 요리 결과 이미지 생성
-    const prompt_image = `다음 요리에 대한 고화질 요리 이미지 생성: ${main_recipe}`;
+    const prompt_image = `
+      다음 요리의 현실적인 음식 이미지를 생성해 주세요:
+      ${ingredientsList}을(를) 사용한 ${
+      cuisine_type || '요리'
+    }.
+      요리는 정교하고 맛있게 플레이팅된 형태로 표현되어야 합니다.
+    `;
+
     const response_image = await openai.images.generate({
       prompt: prompt_image,
       n: 1,
@@ -93,7 +100,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error(
-      'Error fetching recipe from GPT API:',
+      'Error fetching recipe or image from GPT API:',
       error
     );
     return NextResponse.json(
