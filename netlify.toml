@@ -4,8 +4,8 @@
   functions = "netlify/functions"
 
 [functions]
-  # 타임아웃 설정 (단위: 초)
+  # 타임아웃 설정
   timeout = 30
-  
-  # 외부 Node.js 모듈 명시
+
+  # 외부 모듈 명시
   external_node_modules = ["openai", "axios"]
