@@ -54,7 +54,6 @@ export async function POST(req: NextRequest) {
           cuisine_type || '요리'
         }에 어울리는 추가 재료들을 포함한 레시피를 제공해 주세요.
         주재료는 ${ingredientsList}입니다.
-        반드시 현실적인 요리 레시피만 추천해주세요.
       `;
 
       const response_side =
