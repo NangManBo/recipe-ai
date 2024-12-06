@@ -76,37 +76,47 @@ export async function POST(req: NextRequest) {
         '부재료 레시피를 찾을 수 없습니다.';
     }
 
-    // DALL·E를 사용하여 요리 결과 이미지 생성
-    const prompt_image = `
-      다음 요리의 현실적인 음식 이미지를 생성해 주세요:
+    // GPT API에 보낼 YouTube 링크 추천 프롬프트 작성
+    const prompt_youtube = `
+      다음 요리에 적합한 YouTube 동영상 링크를 추천해 주세요:
       ${ingredientsList}을(를) 사용한 ${
       cuisine_type || '요리'
     }.
-      요리는 정교하고 맛있게 플레이팅된 형태로 표현되어야 합니다.
+      동영상은 실제 요리 방법을 다루는 신뢰할 수 있는 YouTube 채널에서 추천해 주세요.
     `;
 
-    const response_image = await openai.images.generate({
-      prompt: prompt_image,
-      n: 1,
-      size: '512x512',
-    });
+    const response_youtube =
+      await openai.chat.completions.create({
+        model: 'gpt-4',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a helpful assistant.',
+          },
+          { role: 'user', content: prompt_youtube },
+        ],
+        max_tokens: 500,
+        temperature: 0.7,
+      });
 
-    const image_url = response_image.data[0]?.url || null;
+    const youtube_link =
+      response_youtube.choices[0]?.message?.content?.trim() ||
+      'YouTube 링크를 찾을 수 없습니다.';
 
     return NextResponse.json({
       main_recipe,
       side_recipe,
-      image_url,
+      youtube_link,
     });
   } catch (error) {
     console.error(
-      'Error fetching recipe or image from GPT API:',
+      'Error fetching recipe or YouTube link from GPT API:',
       error
     );
     return NextResponse.json(
       {
         error:
-          'Failed to fetch recipe or image from GPT API',
+          'Failed to fetch recipe or YouTube link from GPT API',
       },
       { status: 500 }
     );

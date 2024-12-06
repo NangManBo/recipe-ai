@@ -33,9 +33,9 @@ export default function Home() {
   const [sideRecipe, setSideRecipe] = useState<string[]>(
     []
   );
-  const [imageUrl, setImageUrl] = useState<string | null>(
-    null
-  ); // 이미지 URL 상태 추가
+  const [youtubeLink, setYoutubeLink] = useState<
+    string | null
+  >(null); // YouTube 링크 상태 추가
   const [isLoading, setIsLoading] = useState(false);
 
   const splitRecipeSteps = (recipe: string) => {
@@ -51,11 +51,11 @@ export default function Home() {
         cuisine_type: cuisine?.value, // 요리 스타일 전달
       });
 
-      const { main_recipe, side_recipe, image_url } =
-        response.data; // 이미지 URL 추가
+      const { main_recipe, side_recipe, youtube_link } =
+        response.data; // YouTube 링크 추가
       setMainRecipe(splitRecipeSteps(main_recipe));
       setSideRecipe(splitRecipeSteps(side_recipe || ''));
-      setImageUrl(image_url || null); // 이미지 URL 설정
+      setYoutubeLink(youtube_link || null); // YouTube 링크 설정
 
       console.log('Recipe:', response.data);
     } catch (error) {
@@ -113,17 +113,18 @@ export default function Home() {
 
       <div className="line"></div>
       {isLoading && <LoadingModal />}
-      {imageUrl && (
-        <div className="image-container">
-          <h2>요리 결과 이미지</h2>
-          <img
-            src={imageUrl}
-            alt="추천된 요리"
-            className="recipe-image"
-          />
+      {youtubeLink && (
+        <div className="youtube-link">
+          <h2>추천된 YouTube 동영상</h2>
+          <a
+            href={youtubeLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {youtubeLink}
+          </a>
         </div>
       )}
-
       {mainRecipe.length > 0 && (
         <div className="recipe-info">
           <h2>추천된 메인 레시피</h2>
