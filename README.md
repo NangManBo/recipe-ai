@@ -8,16 +8,16 @@
 
 ## 📄서비스 설명
 
-<div style="overflow: hidden; display: flex; flex-wrap: wrap; align-items: center;">
-  <div style="margin-right: 20px; flex-shrink: 0;">
-    <img src="image.png" alt="alt text" style="width: 150px; height: auto;" />
-  </div>
-  <div style="flex-grow: 1;">
+|                                   이미지                                   | 설명 |
+| :------------------------------------------------------------------------: | :--: |
+| <img src="image.png" alt="alt text" style="width: 150px; height: auto;" /> |
+
+<div style="flex-grow: 1;">
     <p>- 1. 페이지에서 요리 재료 입력</p>
     <p>- 2. 자신의 요리 실력에 맞게 난이도 설정</p>
     <p>- 3. 요리 스타일 선택 (한식, 중식, 일식, 양식 등)</p>
   </div>
-</div>
+  |
 
 - 페이지 안에서 GPT API와 연동된 서버에서 레시피와 링크 추천
 - 레시피 내용 확인 가능
