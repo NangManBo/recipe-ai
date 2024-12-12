@@ -170,7 +170,8 @@ export default function Home() {
             <strong>이름:</strong> {mainRecipe.name}
           </p>
           <p>
-            <strong>재료:</strong> {mainRecipe.ingredients}
+            <strong className="margin-text">재료:</strong>{' '}
+            {mainRecipe.ingredients}
           </p>
           <ol>
             {mainRecipe.steps.map((step, index) => (
@@ -187,7 +188,8 @@ export default function Home() {
             <strong>이름:</strong> {sideRecipe.name}
           </p>
           <p>
-            <strong>재료:</strong> {sideRecipe.ingredients}
+            <strong className="margin-text">재료:</strong>{' '}
+            {sideRecipe.ingredients}
           </p>
           <ol>
             {sideRecipe.steps.map((step, index) => (
