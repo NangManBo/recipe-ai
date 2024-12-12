@@ -9,7 +9,7 @@
 
 <div style="display: flex; flex-direction: row; align-items: center;">
   <div style="margin-right: 20px;">
-    <img src="image.png" alt="alt text" />
+    <img src="image.png" alt="alt text" style="width: 150px; height: auto;" />
   </div>
   <div>
     <p>- 1. 페이지에서 요리 재료 입력</p>
