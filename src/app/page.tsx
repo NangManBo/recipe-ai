@@ -18,6 +18,12 @@ interface CuisineOption {
   label: string;
 }
 
+interface Recipe {
+  name: string;
+  ingredients: string;
+  steps: string[];
+}
+
 export default function Home() {
   const [ingredients, setIngredients] = useState('');
   const [difficulty, setDifficulty] =
@@ -26,20 +32,33 @@ export default function Home() {
       label: '난이도 1',
     });
   const [cuisine, setCuisine] =
-    useState<CuisineOption | null>(null); // 요리 스타일 상태 추가
-  const [mainRecipe, setMainRecipe] = useState<string[]>(
-    []
-  );
-  const [sideRecipe, setSideRecipe] = useState<string[]>(
-    []
-  );
+    useState<CuisineOption | null>(null);
+  const [mainRecipe, setMainRecipe] =
+    useState<Recipe | null>(null);
+  const [sideRecipe, setSideRecipe] =
+    useState<Recipe | null>(null);
   const [youtubeLink, setYoutubeLink] = useState<
     string | null
-  >(null); // YouTube 링크 상태 추가
+  >(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const splitRecipeSteps = (recipe: string) => {
-    return recipe.split(/\d+\.\s/).filter((step) => step);
+  const parseRecipe = (recipe: string): Recipe | null => {
+    const nameMatch = recipe.match(/레시피 이름:\s*(.+)/);
+    const ingredientsMatch = recipe.match(/재료:\s*(.+)/);
+    const stepsMatch = recipe.match(/조리법:\s*([\s\S]+)/);
+
+    if (nameMatch && ingredientsMatch && stepsMatch) {
+      const steps = stepsMatch[1]
+        .split(/\n/)
+        .map((step) => step.replace(/^\d+\.\s*/, '').trim())
+        .filter((step) => step !== '');
+      return {
+        name: nameMatch[1].trim(),
+        ingredients: ingredientsMatch[1].trim(),
+        steps: steps,
+      };
+    }
+    return null;
   };
 
   const getRecipe = async () => {
@@ -48,14 +67,17 @@ export default function Home() {
       const response = await axios.post('/api/recommend', {
         ingredients,
         difficulty_level: difficulty.value,
-        cuisine_type: cuisine?.value, // 요리 스타일 전달
+        cuisine_type: cuisine?.value,
       });
 
       const { main_recipe, side_recipe, youtube_link } =
-        response.data; // YouTube 링크 추가
-      setMainRecipe(splitRecipeSteps(main_recipe));
-      setSideRecipe(splitRecipeSteps(side_recipe || ''));
-      setYoutubeLink(youtube_link || null); // YouTube 링크 설정
+        response.data;
+
+      setMainRecipe(parseRecipe(main_recipe));
+      setSideRecipe(
+        side_recipe ? parseRecipe(side_recipe) : null
+      );
+      setYoutubeLink(youtube_link || null);
 
       console.log('Recipe:', response.data);
     } catch (error) {
@@ -113,6 +135,7 @@ export default function Home() {
 
       <div className="line"></div>
       {isLoading && <LoadingModal />}
+
       {youtubeLink && (
         <div className="youtube-link">
           <h2>추천된 YouTube 동영상</h2>
@@ -121,26 +144,39 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            {youtubeLink}
+            YouTube에서 보기
           </a>
         </div>
       )}
-      {mainRecipe.length > 0 && (
+
+      {mainRecipe && (
         <div className="recipe-info">
           <h2>추천된 메인 레시피</h2>
+          <p>
+            <strong>이름:</strong> {mainRecipe.name}
+          </p>
+          <p>
+            <strong>재료:</strong> {mainRecipe.ingredients}
+          </p>
           <ol>
-            {mainRecipe.map((step, index) => (
+            {mainRecipe.steps.map((step, index) => (
               <li key={index}>{step}</li>
             ))}
           </ol>
         </div>
       )}
 
-      {sideRecipe.length > 0 && (
+      {sideRecipe && (
         <div className="recipe-info">
-          <h2>추천된 부재료 레시피</h2>
+          <h2>추천된 부 레시피</h2>
+          <p>
+            <strong>이름:</strong> {sideRecipe.name}
+          </p>
+          <p>
+            <strong>재료:</strong> {sideRecipe.ingredients}
+          </p>
           <ol>
-            {sideRecipe.map((step, index) => (
+            {sideRecipe.steps.map((step, index) => (
               <li key={index}>{step}</li>
             ))}
           </ol>
