@@ -8,23 +8,29 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import './page.scss';
 
+// 난이도 인터페이스
 interface DifficultyOption {
   value: number;
   label: string;
 }
 
+// 요리 종류 인터페이스
 interface CuisineOption {
   value: string;
   label: string;
 }
 
+// 서버에서 받아오는 레시피 데이터 인터페이스
 interface Recipe {
   name: string;
   ingredients: string;
   steps: string[];
 }
 
+// 메인 페이지지
 export default function Home() {
+  // 순서대로
+  // 재료, 난이도, 요리 스타일, 메인 레시피, 부재료 레시피, 유튜브 링크, 로딩 상태태
   const [ingredients, setIngredients] = useState('');
   const [difficulty, setDifficulty] =
     useState<DifficultyOption>({
@@ -42,6 +48,7 @@ export default function Home() {
   >(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // 서버에서 받아오는 레시피들 순서대로 나타내기 위한 코드 (이름, 재료, 조리법)
   const parseRecipe = (recipe: string): Recipe | null => {
     const nameMatch = recipe.match(/레시피 이름:\s*(.+)/);
     const ingredientsMatch = recipe.match(/재료:\s*(.+)/);
@@ -60,9 +67,11 @@ export default function Home() {
     }
     return null;
   };
-
+  // 서버에서 레시피 받기
   const getRecipe = async () => {
+    // 서버에서 값 받아오는 동안 로딩 모달 창 보이게 하기
     setIsLoading(true);
+    // 서버에 데이터 요청
     try {
       const response = await axios.post('/api/recommend', {
         ingredients,
@@ -73,20 +82,21 @@ export default function Home() {
       const { main_recipe, side_recipe, youtube_link } =
         response.data;
 
+      // 여기서 이제 parseRecipe를 통해 레시피 정리 시키기
       setMainRecipe(parseRecipe(main_recipe));
       setSideRecipe(
         side_recipe ? parseRecipe(side_recipe) : null
       );
       setYoutubeLink(youtube_link || null);
-
-      console.log('Recipe:', response.data);
     } catch (error) {
       console.error('Error fetching recipe:', error);
     } finally {
+      // 로딩 모달 창 없애기
       setIsLoading(false);
     }
   };
 
+  // 각 Select에 값 넣을 것들
   const difficultyOptions: DifficultyOption[] = [
     { value: 1, label: '난이도 1' },
     { value: 2, label: '난이도 2' },
@@ -106,6 +116,7 @@ export default function Home() {
   return (
     <div className="main-page">
       <p className="title">AI 레시피 추천</p>
+      {/* 재료 입력창 */}
       <input
         className="input"
         type="text"
@@ -113,6 +124,7 @@ export default function Home() {
         onChange={(e) => setIngredients(e.target.value)}
         placeholder="재료를 입력하세요"
       />
+      {/*난이도 조절, 요리 조절 박스*/}
       <div className="select-button-box">
         <Select
           className="select"
@@ -134,8 +146,10 @@ export default function Home() {
       </div>
 
       <div className="line"></div>
+      {/* 로딩 시 나타나는 모달창 */}
       {isLoading && <LoadingModal />}
 
+      {/* 유튜브 링크창 */}
       {youtubeLink && (
         <div className="youtube-link">
           <h2>추천된 YouTube 동영상</h2>
@@ -148,7 +162,7 @@ export default function Home() {
           </a>
         </div>
       )}
-
+      {/* 메인 레시피 */}
       {mainRecipe && (
         <div className="recipe-info">
           <h2>추천된 메인 레시피</h2>
@@ -165,7 +179,7 @@ export default function Home() {
           </ol>
         </div>
       )}
-
+      {/* 난이도 2이상일 경우 부 레시피 */}
       {sideRecipe && (
         <div className="recipe-info">
           <h2>추천된 부 레시피</h2>
@@ -182,7 +196,7 @@ export default function Home() {
           </ol>
         </div>
       )}
-
+      {/* 서버에 요청 버튼*/}
       <button className="button" onClick={getRecipe}>
         <FontAwesomeIcon icon={faPlus} />
       </button>
