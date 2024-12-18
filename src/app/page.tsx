@@ -74,7 +74,7 @@ export default function Home() {
     // 서버에 데이터 요청
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/recommend`,
+        `${process.env.NEXT_PUBLIC_OPENAI_API_KEY}/api/recommend`,
         {
           ingredients,
           difficulty_level: difficulty.value,
