@@ -73,14 +73,11 @@ export default function Home() {
     setIsLoading(true);
     // 서버에 데이터 요청
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_OPENAI_API_KEY}/api/recommend`,
-        {
-          ingredients,
-          difficulty_level: difficulty.value,
-          cuisine_type: cuisine?.value,
-        }
-      );
+      const response = await axios.post('/api/recommend', {
+        ingredients,
+        difficulty_level: difficulty.value,
+        cuisine_type: cuisine?.value,
+      });
 
       const { main_recipe, side_recipe, youtube_link } =
         response.data;
